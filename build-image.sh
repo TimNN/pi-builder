@@ -68,7 +68,7 @@ function sync_to() {
 # Base debootstrap
 function bootstrap() {
     # Required tools
-    apt-get -y install binfmt-support debootstrap f2fs-tools \
+    apt-get -y install binfmt-support debootstrap dosfstools f2fs-tools \
     qemu-user-static rsync ubuntu-keyring wget whois
 
     # Use the same base system for all flavours.
