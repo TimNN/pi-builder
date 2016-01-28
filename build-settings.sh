@@ -19,11 +19,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ########################################################################
 
-FLAVOUR="ubuntu-mate"
-FLAVOUR_NAME="Ubuntu MATE"
+FLAVOUR="ubuntu-standard"
+FLAVOUR_NAME="Ubuntu"
 RELEASE="wily"
 VERSION="15.10.1"
 QUALITY=""
+USER=logic
+PUBKEY='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCmHQkBkY56EBZncKWjP+9hnBPewc9xu8iPJMccWpI2AlqzDa2m7A0izMlmccZd13NNTCB9v33dZG7HtZfSFQafexN5RrRZCnfCwrH4N4NdDfBK0NU/lnnPFq80ifVVwmDrVelCC1topL92zr6nQeqVCmJkCb2XhUbcnl0n4wz2rWZe5/4FoG7g+FZBBmD8wLXhyhJT+Tiy8JXfMr54ohD3lcgCDht4NPsnmQgYDkLUBiGtr4vfQny8c84E0gI3nGFyWvK3oP6RIq+GFx4DJV+slIEUTWTnmqCbyweSMIRVpRYcXXlq7i1szx/DwAfLfLouHBTQAkWH/kz2IdbGBjhp mail@timnn.me'
 
 # Either 'ext4' or 'f2fs'
 FS_TYPE="ext4"
@@ -34,10 +36,10 @@ FS_SIZE=4
 # Either 0 or 1.
 # - 0 don't make generic rootfs tarball
 # - 1 make a generic rootfs tarball
-MAKE_TARBALL=1
+MAKE_TARBALL=0
 
-TARBALL="${FLAVOUR}-${VERSION}${QUALITY}-desktop-armhf-rootfs.tar.bz2"
-IMAGE="${FLAVOUR}-${VERSION}${QUALITY}-desktop-armhf-raspberry-pi-2.img"
+TARBALL="${FLAVOUR}-${VERSION}${QUALITY}-server-armhf-rootfs.tar.bz2"
+IMAGE="${FLAVOUR}-${VERSION}${QUALITY}-server-armhf-raspberry-pi-2.img"
 BASEDIR=${HOME}/PiFlavourMaker/${RELEASE}
 BUILDDIR=${BASEDIR}/${FLAVOUR}
 BASE_R=${BASEDIR}/base
@@ -48,7 +50,7 @@ export TZ=UTC
 
 
 if [ "${FLAVOUR}" == "ubuntu-minimal" ] || [ "${FLAVOUR}" == "ubuntu-standard" ]; then
-    USERNAME="ubuntu"
+    USERNAME="$USER"
     OEM_CONFIG=0
 else
     USERNAME="${FLAVOUR}"

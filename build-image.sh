@@ -111,6 +111,11 @@ EOM
 Acquire::PDiffs "0";
 EOM
 
+    cat <<EOM >$R/etc/apt/apt.conf.d/99trans
+# Don't need translations
+Acquire::Languages "none";
+EOM
+
 }
 
 function apt_upgrade() {
@@ -198,7 +203,9 @@ function create_user() {
     else
         chroot $R adduser --gecos "${FLAVOUR_NAME}" --add_extra_groups --disabled-password ${USERNAME}
     fi
-    chroot $R usermod -a -G sudo -p ${PASSWD} ${USERNAME}
+    chroot $R usermod -a -G sudo ${USERNAME}
+
+    chroot $R bash -c "mkdir /home/$USERNAME/.ssh && echo '$PUBKEY' > /home/$USERNAME/.ssh/authorized_keys"
 }
 
 # Prepare oem-config for first boot.
@@ -318,7 +325,7 @@ function configure_hardware() {
     # https://launchpad.net/~fo0bar/+archive/ubuntu/rpi2-nightly/+files/xserver-xorg-video-fbturbo_0%7Egit.20151007.f9a6ed7-0%7Enightly.dsc
 
     # Kernel and Firmware - Pending
-    # https://twolife.be/raspbian/pool/main/bcm-videocore-pkgconfig/bcm-videocore-pkgconfig_1.dsc    
+    # https://twolife.be/raspbian/pool/main/bcm-videocore-pkgconfig/bcm-videocore-pkgconfig_1.dsc
     # https://twolife.be/raspbian/pool/main/linux/linux_4.1.8-1+rpi1.dsc
     # http://archive.raspberrypi.org/debian/pool/main/r/raspi-copies-and-fills/raspi-copies-and-fills_0.5-1.dsc # FTBFS in a PPA
 
@@ -503,6 +510,9 @@ function install_software() {
         chroot $R gdebi -n /tmp/astropi2.deb
         wget -c "${ASTROPI3}" -O $R/tmp/astropi3.deb
         chroot $R gdebi -n /tmp/astropi3.deb
+
+        # networking
+        chroot $R apt-get -y install wpasupplicant
 	fi
 
     if [ "${FLAVOUR}" == "ubuntu-mate" ]; then
