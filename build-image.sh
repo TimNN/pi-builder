@@ -195,7 +195,8 @@ EOM
 # Create default user
 function create_user() {
     local DATE=$(date +%m%H%M%S)
-    local PASSWD=$(mkpasswd -m sha-512 ${USERNAME} ${DATE})
+    local PASS=$(makepasswd --chars 20)
+    local PASSWD=$(mkpasswd -m sha-512 ${PASS})
 
     if [ ${OEM_CONFIG} -eq 1 ]; then
         chroot $R addgroup --gid 29999 oem
@@ -203,8 +204,9 @@ function create_user() {
     else
         chroot $R adduser --gecos "${FLAVOUR_NAME}" --add_extra_groups --disabled-password ${USERNAME}
     fi
-    chroot $R usermod -a -G sudo ${USERNAME}
+    chroot $R usermod -a -G sudo -p ${PASSWD} ${USERNAME}
 
+    chroot $R bash -c "echo '${PASS}' > '/home/$USERNAME/initial_password'"
     chroot $R bash -c "mkdir /home/$USERNAME/.ssh && echo '$PUBKEY' > /home/$USERNAME/.ssh/authorized_keys"
 }
 
