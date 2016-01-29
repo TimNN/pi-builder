@@ -69,7 +69,7 @@ function sync_to() {
 function bootstrap() {
     # Required tools
     apt-get -y install binfmt-support debootstrap dosfstools f2fs-tools \
-    qemu-user-static rsync ubuntu-keyring wget whois
+    makepasswd qemu-user-static rsync ubuntu-keyring wget whois
 
     # Use the same base system for all flavours.
     if [ ! -f "${R}/tmp/.bootstrap" ]; then
